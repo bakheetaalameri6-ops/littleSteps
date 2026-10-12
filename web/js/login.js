@@ -1,0 +1,1 @@
+document.querySelector('#login').onsubmit=handle(async()=>{const result=await api('/auth/login',{method:'POST',body:{username:document.querySelector('#username').value,password:document.querySelector('#password').value}});sessionStorage.setItem('token',result.token);location.href=result.staff.mustChangePassword?'change-password.html':landing[result.staff.role];});
