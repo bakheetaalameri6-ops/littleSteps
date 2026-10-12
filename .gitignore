@@ -1,0 +1,10 @@
+/docs/
+/handoff/
+
+.DS_Store
+**/bin/
+**/obj/
+.env
+.local/
+**/appsettings.Local.json
+node_modules/
