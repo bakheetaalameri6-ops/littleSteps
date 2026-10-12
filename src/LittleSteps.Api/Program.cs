@@ -15,6 +15,8 @@ builder.Services.AddSwaggerGen(o=>{
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<IAuditService,AuditService>();
 builder.Services.AddSingleton<SchoolClock>();
+builder.Services.AddScoped<IStaffService,StaffService>();
+builder.Services.AddScoped<IClassService,ClassService>();
 builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("LittleSteps")));
 // Open CORS: for local validation only. Restrict before any real deployment.
 builder.Services.AddCors(o => o.AddDefaultPolicy(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
