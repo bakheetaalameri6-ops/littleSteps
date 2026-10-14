@@ -21,6 +21,7 @@ builder.Services.AddScoped<IStudentService,StudentService>();
 builder.Services.AddScoped<IGuardianService,GuardianService>();
 builder.Services.AddScoped<IDashboardService,DashboardService>();
 builder.Services.AddScoped<IAttendanceService,AttendanceService>();
+builder.Services.AddScoped<IGateService,GateService>();
 builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("LittleSteps")));
 // Open CORS: for local validation only. Restrict before any real deployment.
 builder.Services.AddCors(o => o.AddDefaultPolicy(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
