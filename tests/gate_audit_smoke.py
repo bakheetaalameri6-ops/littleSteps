@@ -32,7 +32,7 @@ def login(username):
     return call('/auth/login', 'POST', {'username': username, 'password': 'Demo@2026'})['token']
 
 
-admin, teacher, guard, manager = map(login, ['f.almansoori', 'r.saleh', 'a.karim', 'n.alzaabi'])
+admin, teacher, guard, manager = map(login, ['bakheeta', 'r.saleh', 'a.karim', 'n.alzaabi'])
 for token in [admin, teacher, manager]:
     call('/gate/visits', token=token, status=403)
 for token in [admin, teacher, guard]:

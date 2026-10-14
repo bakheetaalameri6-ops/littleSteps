@@ -2,7 +2,7 @@
 -- Run with psql -v ON_ERROR_STOP=1 -f database/reduce-demo.sql after taking a backup.
 -- Removes surplus students and their dependent records; audit entries are preserved.
 BEGIN;
-UPDATE "Staff" SET "FullName" = 'Bakheeta Alameri' WHERE "Username" = 'f.almansoori';
+UPDATE "Staff" SET "FullName" = 'Bakheeta Alameri' WHERE "Username" = 'bakheeta';
 
 DELETE FROM "EarlyExits" WHERE "StudentId" NOT BETWEEN 1 AND 10;
 DELETE FROM "AttendanceRecords" WHERE "StudentId" NOT BETWEEN 1 AND 10;
@@ -25,14 +25,14 @@ WHERE "RevokedAt" IS NULL AND "StaffId" IN (
     SELECT "StaffId" FROM "Staff" WHERE "Role" = 'Teacher' AND "Username" NOT IN ('r.saleh', 'h.yousef')
 );
 INSERT INTO "AuditEntries" ("StaffId", "Username", "Area", "Action", "Details", "Result")
-SELECT 1, 'f.almansoori', 'Staff', 'Staff deactivated', "FullName", 'OK'
+SELECT 1, 'bakheeta', 'Staff', 'Staff deactivated', "FullName", 'OK'
 FROM "Staff" WHERE "Role" = 'Teacher' AND "Username" NOT IN ('r.saleh', 'h.yousef') AND "IsActive";
 UPDATE "Staff" SET "IsActive" = FALSE
 WHERE "Role" = 'Teacher' AND "Username" NOT IN ('r.saleh', 'h.yousef');
 
 INSERT INTO "AuditEntries" ("StaffId", "Username", "Area", "Action", "Details", "Result")
-VALUES (1, 'f.almansoori', 'Staff', 'Staff edited', 'Administrator renamed to Bakheeta Alameri', 'OK'),
-       (1, 'f.almansoori', 'Students', 'Demo data simplified', 'Kept KG2-B and KG1-A with five students each; surplus students and classes removed.', 'OK');
+VALUES (1, 'bakheeta', 'Staff', 'Staff edited', 'Administrator renamed to Bakheeta Alameri', 'OK'),
+       (1, 'bakheeta', 'Students', 'Demo data simplified', 'Kept KG2-B and KG1-A with five students each; surplus students and classes removed.', 'OK');
 
 DO $$
 BEGIN

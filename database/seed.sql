@@ -1,7 +1,7 @@
 -- Demo accounts use Demo@2026. Historical sample data is dated October 2026.
 BEGIN;
 INSERT INTO "Staff" ("FullName", "Role", "Username", "PasswordHash", "PasswordSalt", "MustChangePassword", "Phone") VALUES
- ('Bakheeta Alameri', 'Admin', 'f.almansoori', decode('97E644FE617D82BAB68642DE89FEC4DD3404C9B12CD872DD05EF8617748047F1','hex'), decode('CBC01E57A034D3610EA77DF225D1BC99','hex'),FALSE, '+971 50 111 2201'),
+ ('Bakheeta Alameri', 'Admin', 'bakheeta', decode('97E644FE617D82BAB68642DE89FEC4DD3404C9B12CD872DD05EF8617748047F1','hex'), decode('CBC01E57A034D3610EA77DF225D1BC99','hex'),FALSE, '+971 50 111 2201'),
 ('Rania Saleh', 'Teacher', 'r.saleh', decode('D0A5215B8B1D5A5D4EC9A1223D44A7FDBAEA29066CDE8FF12B7A8AE746FF0F7D','hex'), decode('139066D574E7C1A54CE6F025218FB60E','hex'),FALSE, '+971 50 111 2202'),
 ('Hana Yousef', 'Teacher', 'h.yousef', decode('EF532581C966E3CD3283E97285C7BC81AEBD071A2F8BBFDEE8C8D05BC9E454C8','hex'), decode('FA6C1ECA2EDC2F76C962C34CF8F4E76F','hex'),FALSE, '+971 50 111 2203'),
 ('Joseph Mathew', 'Teacher', 'j.mathew', decode('A4C20231BEE7814665B2128293530F03F0474DD2C5511CA679E542EA846B3ADE','hex'), decode('8A585A3CE81535F64606C1065B6A6836','hex'),FALSE, '+971 50 111 2204'),
@@ -150,7 +150,7 @@ INSERT INTO "EarlyExits" ("StudentId", "PresentedEmiratesId", "GuardianId", "Aut
 
 INSERT INTO "AuditEntries" ("OccurredAt", "StaffId", "Username", "Area", "Action", "Details", "Result", "EntityType", "EntityId") VALUES
  ('2026-10-02 07:41', NULL, 'admin', 'Access', 'Sign in', 'Wrong password', 'Refused', NULL, NULL),
- ('2026-10-02 07:58', 1, 'f.almansoori', 'Access', 'Sign in', NULL, 'OK', 'Staff', 1),
+ ('2026-10-02 07:58', 1, 'bakheeta', 'Access', 'Sign in', NULL, 'OK', 'Staff', 1),
  ('2026-10-02 08:28', 2, 'r.saleh', 'Attendance', 'Attendance saved', 'KG2-B · 2026-10-02', 'OK', 'Class', 5),
  ('2026-10-02 09:42', 7, 'a.karim', 'Gate control', 'Early exit', 'Mariam Khalid: Emirates ID not linked', 'Refused', 'Student', 3),
  ('2026-10-02 10:31', 7, 'a.karim', 'Gate control', 'Early exit', 'Zain Abbas with Bilal Abbas (Father)', 'OK', 'Student', 9);
@@ -162,7 +162,7 @@ COMMIT;
 -- Run with psql -v ON_ERROR_STOP=1 -f database/reduce-demo.sql after taking a backup.
 -- Removes surplus students and their dependent records; audit entries are preserved.
 BEGIN;
-UPDATE "Staff" SET "FullName" = 'Bakheeta Alameri' WHERE "Username" = 'f.almansoori';
+UPDATE "Staff" SET "FullName" = 'Bakheeta Alameri' WHERE "Username" = 'bakheeta';
 
 DELETE FROM "EarlyExits" WHERE "StudentId" NOT BETWEEN 1 AND 10;
 DELETE FROM "AttendanceRecords" WHERE "StudentId" NOT BETWEEN 1 AND 10;
@@ -185,14 +185,14 @@ WHERE "RevokedAt" IS NULL AND "StaffId" IN (
     SELECT "StaffId" FROM "Staff" WHERE "Role" = 'Teacher' AND "Username" NOT IN ('r.saleh', 'h.yousef')
 );
 INSERT INTO "AuditEntries" ("StaffId", "Username", "Area", "Action", "Details", "Result")
-SELECT 1, 'f.almansoori', 'Staff', 'Staff deactivated', "FullName", 'OK'
+SELECT 1, 'bakheeta', 'Staff', 'Staff deactivated', "FullName", 'OK'
 FROM "Staff" WHERE "Role" = 'Teacher' AND "Username" NOT IN ('r.saleh', 'h.yousef') AND "IsActive";
 UPDATE "Staff" SET "IsActive" = FALSE
 WHERE "Role" = 'Teacher' AND "Username" NOT IN ('r.saleh', 'h.yousef');
 
 INSERT INTO "AuditEntries" ("StaffId", "Username", "Area", "Action", "Details", "Result")
-VALUES (1, 'f.almansoori', 'Staff', 'Staff edited', 'Administrator renamed to Bakheeta Alameri', 'OK'),
-       (1, 'f.almansoori', 'Students', 'Demo data simplified', 'Kept KG2-B and KG1-A with five students each; surplus students and classes removed.', 'OK');
+VALUES (1, 'bakheeta', 'Staff', 'Staff edited', 'Administrator renamed to Bakheeta Alameri', 'OK'),
+       (1, 'bakheeta', 'Students', 'Demo data simplified', 'Kept KG2-B and KG1-A with five students each; surplus students and classes removed.', 'OK');
 
 DO $$
 BEGIN
